@@ -1,38 +1,28 @@
-from telethon.sync import TelegramClient
-from config import *
-from time import monotonic
-api_id = api_id
-api_hash = api_hash
-username = 'my_accaount'
-client = TelegramClient(username, api_id, api_hash)
-client.start()
-while True:
-    m=monotonic()
-    with client:
-        chats = client.get_dialogs()
-        k=0
-        for chat in chats:
-            # u_n=chat.entity.username
-            try:
-                id=chat.entity.id
-                ls=0
-                def read_messages(u_n):
-                    global ls
-                    for message in client.iter_messages(u_n):
-                        ls+=1
-                        if ls==3:
-                            break
-                read_messages(id)
-                if ls <= 2:
-                    client.send_message(id,"Assalomu alaykum")
-                    client.send_message(id, "Sizga qanday yordam ber olaman")
-            except Exception:
-                pass
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes,filters,MessageHandler
 
-            if k ==5:
-                break
-            k+=1
 
-    print("Ko'rib chiqdim")
-    print(f"Ketgan vaqt: {monotonic()-m}")
+ls=["A masala\nMenda 3 ta olma bor edi shunda menda nechta olma bor"]
 
+async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_html(f'login: <code>Login yoq</code>\nparol: <code>parol yoq</code>')
+    for i in ls:
+        await update.message.reply_html(f"<code>{i}</code>")
+
+    await update.message.reply_text(f"masalalar soni hozrida: {len(ls)}")
+
+    await update.message.reply_html("Nima yossalaringham menga keladi. Agar men yana masalarni yozsam uni bilish uchun /start ni bosilar shunda men qoshgan masalarni hammasi keladi.")
+
+async def text(update:Update, context:ContextTypes.DEFAULT_TYPE) -> None:
+    text=update.message.text
+    print(update.effective_user.full_name,"|",text)
+    r=input("-> ")
+    await update.message.reply_html(f"<code>{r}</code>")
+
+
+app = ApplicationBuilder().token("6647247101:AAEEjUX3QFqmFBJU7okbqz49oXlUpe0M-Zk").build()
+
+app.add_handler(CommandHandler("start", hello))
+app.add_handler(MessageHandler(filters.TEXT,text))
+
+app.run_polling()
