@@ -2,10 +2,10 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes,filters,MessageHandler
 
 
-ls=["A masala\nMenda 3 ta olma bor edi shunda menda nechta olma bor"]
+ls=[""]
 
 async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_html(f'login: <code>Login yoq</code>\nparol: <code>parol yoq</code>')
+    await update.message.reply_html("Menga shu bot orqali o'z yechimlaringni yuboringlar agar sizlar buyogdan turib otikizsalaring IP da ushalb qolyapdi")
     for i in ls:
         await update.message.reply_html(f"<code>{i}</code>")
 
