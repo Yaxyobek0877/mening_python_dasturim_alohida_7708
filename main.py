@@ -1,1 +1,1 @@
-ls=["Hello.com"]
+print("salom")
